@@ -1,4 +1,4 @@
-const BASE = import.meta.env.DEV ? '' : ''
+const BASE = import.meta.env.VITE_API_BASE || ''
 
 export async function api(path, options = {}) {
   const token = JSON.parse(localStorage.getItem('auth') || '{}')?.token

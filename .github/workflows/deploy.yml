@@ -30,6 +30,8 @@ jobs:
       - run: npm ci
 
       - run: npm run build -- --base=/portfolio/
+        env:
+          VITE_API_BASE: https://portfolio-beta-sepia-19.vercel.app
 
       - uses: actions/configure-pages@v4
 
