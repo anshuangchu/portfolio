@@ -5,6 +5,8 @@ import { parseBody } from '../_lib/parse.js'
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-in-production'
 
 export default async function handler(req, res) {
+  // GET /api/posts — public: only published
+  // POST /api/posts — create new post (auth required)
   if (req.method === 'GET') {
     return handleList(req, res)
   }
@@ -16,31 +18,6 @@ export default async function handler(req, res) {
 
 async function handleList(req, res) {
   try {
-    const isAdmin = req.query.all === 'true'
-
-    if (isAdmin) {
-      // Admin: return all posts, require auth
-      const header = req.headers.authorization
-      if (!header?.startsWith('Bearer ')) {
-        return res.status(401).json({ error: '未登录' })
-      }
-      try {
-        const token = header.slice(7)
-        jwt.verify(token, JWT_SECRET)
-      } catch {
-        return res.status(401).json({ error: '登录已过期' })
-      }
-
-      const posts = await sql`
-        SELECT id, title, excerpt, category, category_color, tags, published,
-               created_at, updated_at
-        FROM posts
-        ORDER BY created_at DESC
-      `
-      return res.json(posts.map(p => ({ ...p, tags: JSON.parse(p.tags || '[]') })))
-    }
-
-    // Public: only published posts
     const posts = await sql`
       SELECT id, title, excerpt, category, category_color, tags, published,
              created_at, updated_at, author_id

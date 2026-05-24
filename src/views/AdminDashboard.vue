@@ -74,7 +74,7 @@ onMounted(async () => {
 async function loadPosts() {
   try {
     loading.value = true
-    posts.value = await api('/posts?all=true')
+    posts.value = await api('/admin/posts')
   } catch (e) {
     error.value = e.message
   } finally {
