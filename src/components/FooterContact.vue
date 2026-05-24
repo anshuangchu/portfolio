@@ -2,12 +2,12 @@
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-col">
-        <h4>联系我</h4>
-        <p>对 AI、机器人或智能车竞赛感兴趣？欢迎交流与合作。</p>
+        <h4>安双初 · 技术笔记</h4>
+        <p>记录 AI、编程、嵌入式的探索之旅。</p>
       </div>
       <div class="footer-col">
         <h4>链接</h4>
-        <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://github.com/anshuangchu" target="_blank" rel="noopener noreferrer">GitHub</a>
         <a href="#" @click.prevent>邮箱: 3288456983@qq.com</a>
       </div>
       <div class="footer-col">

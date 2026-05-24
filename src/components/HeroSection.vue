@@ -2,23 +2,22 @@
   <header class="hero">
     <div class="hero-bg"></div>
     <div class="hero-content">
-      <div class="avatar">安</div>
-      <h1 class="hero-name">安双初</h1>
+      <div class="avatar">笔</div>
+      <p class="hero-label">技术博客</p>
+      <h1 class="hero-name">安双初 · 技术笔记</h1>
       <p class="hero-tagline">
-        <span class="highlight">AI 开发者</span>
+        记录 <span class="highlight">AI 大模型</span>
         <span class="dot">&middot;</span>
-        <span class="highlight">机器人爱好者</span>
+        <span class="highlight">编程开发</span>
         <span class="dot">&middot;</span>
-        <span class="highlight">智能车竞赛选手</span>
+        <span class="highlight">嵌入式硬件</span>
       </p>
       <p class="hero-bio">
-        专注于 AI Agent 开发、大模型应用与机器人控制。<br />
-        热爱探索硬件与软件的交汇点，将智能算法落地到真实世界。
+        跨领域的技术探索笔记，将知识沉淀为文字，与同路人分享。
       </p>
       <div class="hero-actions">
-        <button @click="scrollTo('ai')">AI 项目</button>
-        <button @click="scrollTo('robotics')">机器人项目</button>
-        <button @click="scrollTo('tools')">工具集</button>
+        <button @click="scrollTo('posts')">最新文章</button>
+        <button @click="scrollTo('about')">关于</button>
       </div>
     </div>
   </header>
@@ -58,18 +57,26 @@ function scrollTo(id) {
 }
 
 .avatar {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--primary), var(--accent));
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.4rem;
-  font-weight: 700;
+  font-size: 2.2rem;
   color: #fff;
-  margin: 0 auto 24px;
+  margin: 0 auto 16px;
   box-shadow: 0 8px 32px rgba(108, 92, 231, 0.3);
+}
+
+.hero-label {
+  font-size: 0.85rem;
+  color: var(--primary-light);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  opacity: 0.7;
 }
 
 .hero-name {
