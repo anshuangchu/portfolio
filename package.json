@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:vercel": "vercel dev",
+    "dev:vercel": "vercel dev --listen 3001",
+    "dev:api": "node --env-file .env api/local.mjs",
+    "dev:all": "npx concurrently -n frontend,api \"npm run dev\" \"npm run dev:api\"",
     "build": "vite build",
     "preview": "vite preview"
   },

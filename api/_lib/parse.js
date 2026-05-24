@@ -1,8 +1,11 @@
 export async function parseBody(req) {
-  const chunks = []
-  for await (const chunk of req) {
-    chunks.push(typeof chunk === 'string' ? chunk : chunk.toString())
-  }
-  const raw = chunks.join('')
-  return raw ? JSON.parse(raw) : {}
+  const raw = req.body
+  if (raw) return typeof raw === 'string' ? JSON.parse(raw) : raw
+  return new Promise((resolve) => {
+    let data = ''
+    req.on('data', chunk => { data += chunk })
+    req.on('end', () => {
+      try { resolve(data ? JSON.parse(data) : {}) } catch { resolve({}) }
+    })
+  })
 }
