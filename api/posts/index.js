@@ -1,10 +1,13 @@
 import jwt from 'jsonwebtoken'
 import sql from '../_lib/db.js'
 import { parseBody } from '../_lib/parse.js'
+import { setCors, handlePreflight } from '../_lib/cors.js'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-in-production'
 
 export default async function handler(req, res) {
+  setCors(res)
+  if (handlePreflight(req, res)) return
   // GET /api/posts — public: only published
   // POST /api/posts — create new post (auth required)
   if (req.method === 'GET') {
