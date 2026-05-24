@@ -22,10 +22,10 @@ export const authStore = reactive({
     localStorage.setItem('auth', JSON.stringify({ user: data.user, token: data.token }))
   },
 
-  async register(username, email, password) {
+  async register(username, email, password, inviteCode) {
     const data = await api('/auth/register', {
       method: 'POST',
-      body: JSON.stringify({ username, email, password }),
+      body: JSON.stringify({ username, email, password, inviteCode }),
     })
     this.user = data.user
     this.token = data.token

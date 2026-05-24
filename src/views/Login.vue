@@ -13,6 +13,10 @@
           <label>用户名</label>
           <input v-model="username" type="text" placeholder="你的用户名" required />
         </div>
+        <div v-if="isRegister" class="field">
+          <label>邀请码</label>
+          <input v-model="inviteCode" type="text" placeholder="输入邀请码" required />
+        </div>
         <div class="field">
           <label>邮箱</label>
           <input v-model="email" type="email" placeholder="your@email.com" required />
@@ -51,6 +55,7 @@ const isRegister = ref(false)
 const username = ref('')
 const email = ref('')
 const password = ref('')
+const inviteCode = ref('')
 const error = ref('')
 const loading = ref(false)
 
@@ -59,7 +64,7 @@ async function handleSubmit() {
   loading.value = true
   try {
     if (isRegister.value) {
-      await authStore.register(username.value, email.value, password.value)
+      await authStore.register(username.value, email.value, password.value, inviteCode.value)
     } else {
       await authStore.login(email.value, password.value)
     }
