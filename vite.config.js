@@ -13,7 +13,7 @@ const securityHeaders = {
 }
 
 export default defineConfig({
-  base: '/portfolio/',
+  base: '/',
   plugins: [
     vue(),
     {
