@@ -11,9 +11,15 @@ app.use(express.json())
 
 // ─── Auth ───
 
-app.post('/auth/register', async (req, res) => {
+app.post('/api/auth/register', async (req, res) => {
   try {
-    const { username, email, password } = req.body
+    const { username, email, password, inviteCode } = req.body
+
+    const expected = process.env.INVITE_CODE
+    if (expected && inviteCode !== expected) {
+      return res.status(403).json({ error: '邀请码错误' })
+    }
+
     if (!username || !email || !password) {
       return res.status(400).json({ error: '请填写所有字段' })
     }
@@ -41,7 +47,7 @@ app.post('/auth/register', async (req, res) => {
   }
 })
 
-app.post('/auth/login', async (req, res) => {
+app.post('/api/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body
     if (!email || !password) {
@@ -66,7 +72,7 @@ app.post('/auth/login', async (req, res) => {
   }
 })
 
-app.get('/auth/me', requireAuth, async (req, res) => {
+app.get('/api/auth/me', requireAuth, async (req, res) => {
   try {
     const [user] = await sql`SELECT id, username, email, created_at FROM users WHERE id = ${req.userId}`
     if (!user) return res.status(404).json({ error: '用户不存在' })
@@ -79,7 +85,7 @@ app.get('/auth/me', requireAuth, async (req, res) => {
 
 // ─── Posts ───
 
-app.get('/posts', async (req, res) => {
+app.get('/api/posts', async (req, res) => {
   try {
     const posts = await sql`
       SELECT id, title, excerpt, category, category_color, tags, published,
@@ -95,7 +101,22 @@ app.get('/posts', async (req, res) => {
   }
 })
 
-app.get('/posts/:id', async (req, res) => {
+app.get('/api/posts/admin/all', requireAuth, async (req, res) => {
+  try {
+    const posts = await sql`
+      SELECT id, title, excerpt, category, category_color, tags, published,
+             created_at, updated_at
+      FROM posts
+      ORDER BY created_at DESC
+    `
+    res.json(posts.map(p => ({ ...p, tags: JSON.parse(p.tags || '[]') })))
+  } catch (err) {
+    console.error('admin list error:', err)
+    res.status(500).json({ error: '获取文章列表失败' })
+  }
+})
+
+app.get('/api/posts/:id', async (req, res) => {
   try {
     const [post] = await sql`
       SELECT p.*, u.username as author_name
@@ -111,22 +132,7 @@ app.get('/posts/:id', async (req, res) => {
   }
 })
 
-app.get('/posts/admin/all', requireAuth, async (req, res) => {
-  try {
-    const posts = await sql`
-      SELECT id, title, excerpt, category, category_color, tags, published,
-             created_at, updated_at
-      FROM posts
-      ORDER BY created_at DESC
-    `
-    res.json(posts.map(p => ({ ...p, tags: JSON.parse(p.tags || '[]') })))
-  } catch (err) {
-    console.error('admin list error:', err)
-    res.status(500).json({ error: '获取文章列表失败' })
-  }
-})
-
-app.post('/posts', requireAuth, async (req, res) => {
+app.post('/api/posts', requireAuth, async (req, res) => {
   try {
     const { title, content, excerpt, category, category_color, tags, published } = req.body
     if (!title || !content || !category) {
@@ -146,7 +152,7 @@ app.post('/posts', requireAuth, async (req, res) => {
   }
 })
 
-app.put('/posts/:id', requireAuth, async (req, res) => {
+app.put('/api/posts/:id', requireAuth, async (req, res) => {
   try {
     const { title, content, excerpt, category, category_color, tags, published } = req.body
     const [post] = await sql`
@@ -170,7 +176,7 @@ app.put('/posts/:id', requireAuth, async (req, res) => {
   }
 })
 
-app.delete('/posts/:id', requireAuth, async (req, res) => {
+app.delete('/api/posts/:id', requireAuth, async (req, res) => {
   try {
     const [post] = await sql`
       DELETE FROM posts WHERE id = ${req.params.id} AND author_id = ${req.userId}
