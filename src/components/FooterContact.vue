@@ -12,7 +12,7 @@
       </div>
       <div class="footer-col">
         <h4>关于本站</h4>
-        <p>使用 Vue 3 + Vite 构建 &middot; 纯手工打造</p>
+        <p>使用 Vue 3 + Vite 构建 &middot; 纯AI建造</p>
       </div>
     </div>
     <div class="footer-bottom">
