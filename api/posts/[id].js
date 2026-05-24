@@ -27,7 +27,7 @@ async function handleGet(req, res, id) {
       WHERE p.id = ${id}
     `
     if (!post) return res.status(404).json({ error: '文章不存在' })
-    post.tags = JSON.parse(post.tags || '[]')
+    post.tags = Array.isArray(post.tags) ? post.tags : []
     res.json(post)
   } catch (err) {
     console.error('get post error:', err)

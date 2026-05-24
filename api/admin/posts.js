@@ -26,7 +26,7 @@ export default async function handler(req, res) {
       FROM posts
       ORDER BY created_at DESC
     `
-    res.json(posts.map(p => ({ ...p, tags: JSON.parse(p.tags || '[]') })))
+    res.json(posts.map(p => ({ ...p, tags: Array.isArray(p.tags) ? p.tags : [] })))
   } catch (err) {
     console.error('admin list error:', err)
     res.status(500).json({ error: '获取文章列表失败' })
