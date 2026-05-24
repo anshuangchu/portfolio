@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs'
 import sql from '../_lib/db.js'
 import { signToken } from '../_lib/auth.js'
+import { parseBody } from '../_lib/parse.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -8,7 +9,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { email, password } = req.body
+    const { email, password } = await parseBody(req)
     if (!email || !password) {
       return res.status(400).json({ error: '请填写邮箱和密码' })
     }

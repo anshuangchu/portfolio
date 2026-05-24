@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs'
 import sql from '../_lib/db.js'
 import { signToken } from '../_lib/auth.js'
+import { parseBody } from '../_lib/parse.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -8,7 +9,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { username, email, password, inviteCode } = req.body
+    const { username, email, password, inviteCode } = await parseBody(req)
 
     const expected = process.env.INVITE_CODE
     if (expected && inviteCode !== expected) {

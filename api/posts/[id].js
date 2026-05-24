@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 import sql from '../_lib/db.js'
+import { parseBody } from '../_lib/parse.js'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-in-production'
 
@@ -51,7 +52,7 @@ async function handleUpdate(req, res, id) {
   if (!userId) return res.status(401).json({ error: '未登录' })
 
   try {
-    const { title, content, excerpt, category, category_color, tags, published } = req.body
+    const { title, content, excerpt, category, category_color, tags, published } = await parseBody(req)
     const [post] = await sql`
       UPDATE posts SET
         title = COALESCE(${title}, title),

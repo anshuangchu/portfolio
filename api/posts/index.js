@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 import sql from '../_lib/db.js'
+import { parseBody } from '../_lib/parse.js'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-in-production'
 
@@ -70,7 +71,7 @@ async function handleCreate(req, res) {
   }
 
   try {
-    const { title, content, excerpt, category, category_color, tags, published } = req.body
+    const { title, content, excerpt, category, category_color, tags, published } = await parseBody(req)
     if (!title || !content || !category) {
       return res.status(400).json({ error: '标题、内容和分类不能为空' })
     }
