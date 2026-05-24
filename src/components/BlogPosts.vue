@@ -50,9 +50,25 @@ const tabs = [
   { key: 'embedded', label: '嵌入式 / 硬件' },
 ]
 
+async function loadStatic() {
+  try {
+    const base = import.meta.env.BASE_URL || '/'
+    const res = await fetch(`${base}data/posts.json`)
+    if (!res.ok) throw new Error('not found')
+    return await res.json()
+  } catch {
+    return null
+  }
+}
+
 onMounted(async () => {
   try {
-    posts.value = await api('/posts')
+    const data = await loadStatic()
+    if (data && data.length > 0) {
+      posts.value = data
+    } else {
+      posts.value = await api('/posts')
+    }
   } catch (e) {
     error.value = '加载文章失败：' + e.message
   } finally {
